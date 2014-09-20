@@ -30,10 +30,14 @@
 // features below are disabled by default on APM (but enabled on Pixhawk)
 //#define AC_RALLY              ENABLED             // disable rally points to save 2k of flash, and also frees rally point EEPROM for more mission commands
 //#define PARACHUTE             ENABLED             // enable parachute release at a cost of 1k of flash
+<<<<<<< HEAD
 //#define EPM_ENABLED           ENABLED             // enable epm cargo gripper costs 500bytes of flash
 //#define CLI_ENABLED           ENABLED             // enable the CLI (command-line-interface) at a cost of 21K of flash space
 //#define NAV_GUIDED            ENABLED             // enable external navigation computer to control vehicle through MAV_CMD_NAV_GUIDED mission commands
 //#define OPTFLOW               ENABLED             // enable optical flow sensor and OF_LOITER flight mode at a cost of 5K of flash space
+=======
+//#define CLI_ENABLED           ENABLED             // enable the CLI (command-line-interface) at a cost of 21K of flash space
+>>>>>>> Copter: cleanup enabling of cli and frsky telem for APM
 
 // features below are disabled by default on all boards
 //#define SPRAYER               ENABLED             // enable the crop sprayer feature (two ESC controlled pumps the speed of which depends upon the vehicle's horizontal velocity)

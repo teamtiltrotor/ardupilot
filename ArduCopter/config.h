@@ -82,10 +82,9 @@
 #if HAL_CPU_CLASS < HAL_CPU_CLASS_75
  # define PARACHUTE DISABLED
  # define AC_RALLY DISABLED
- # define EPM_ENABLED DISABLED
  # define CLI_ENABLED           DISABLED
  # define FRSKY_TELEM_ENABLED   DISABLED
- # define NAV_GUIDED            DISABLED
+
 #endif
 
 
