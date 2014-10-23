@@ -48,19 +48,23 @@ const AP_Param::GroupInfo AP_Relay::var_info[] PROGMEM = {
     // @Values: -1:Disabled,13:APM2 A9 pin,47:APM1 relay,50:Pixhawk AUXOUT1,51:Pixhawk AUXOUT2,52:Pixhawk AUXOUT3,53:Pixhawk AUXOUT4,54:Pixhawk AUXOUT5,55:Pixhawk AUXOUT6,111:PX4 FMU Relay1,112:PX4 FMU Relay2,113:PX4IO Relay1,114:PX4IO Relay2,115:PX4IO ACC1,116:PX4IO ACC2
     AP_GROUPINFO("PIN2",  1, AP_Relay, _pin[1], RELAY2_PIN_DEFAULT),
 
+#if AP_RELAY_NUM_RELAYS > 2
     // @Param: PIN3
     // @DisplayName: Third Relay Pin
     // @Description: Digital pin number for 3rd relay control.
     // @User: Standard
     // @Values: -1:Disabled,13:APM2 A9 pin,47:APM1 relay,50:Pixhawk AUXOUT1,51:Pixhawk AUXOUT2,52:Pixhawk AUXOUT3,53:Pixhawk AUXOUT4,54:Pixhawk AUXOUT5,55:Pixhawk AUXOUT6,111:PX4 FMU Relay1,112:PX4 FMU Relay2,113:PX4IO Relay1,114:PX4IO Relay2,115:PX4IO ACC1,116:PX4IO ACC2
     AP_GROUPINFO("PIN3",  2, AP_Relay, _pin[2], -1),
+#endif
 
+#if AP_RELAY_NUM_RELAYS > 3
     // @Param: PIN4
     // @DisplayName: Fourth Relay Pin
     // @Description: Digital pin number for 4th relay control.
     // @User: Standard
     // @Values: -1:Disabled,13:APM2 A9 pin,47:APM1 relay,50:Pixhawk AUXOUT1,51:Pixhawk AUXOUT2,52:Pixhawk AUXOUT3,53:Pixhawk AUXOUT4,54:Pixhawk AUXOUT5,55:Pixhawk AUXOUT6,111:PX4 FMU Relay1,112:PX4 FMU Relay2,113:PX4IO Relay1,114:PX4IO Relay2,115:PX4IO ACC1,116:PX4IO ACC2
     AP_GROUPINFO("PIN4",  3, AP_Relay, _pin[3], -1),
+#endif
 
     // @Param: DEFAULT
     // @DisplayName: Default relay state
