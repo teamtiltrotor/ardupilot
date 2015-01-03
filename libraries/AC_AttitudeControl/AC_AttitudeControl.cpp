@@ -564,6 +564,8 @@ float AC_AttitudeControl::rate_bf_to_motor_roll(float rate_target_cds)
     float current_rate;     // this iteration's rate
     float rate_error;       // simply target_rate - current_rate
 
+    //float * tbone;
+
     // get current rate
     // To-Do: make getting gyro rates more efficient?
     current_rate = (_ahrs.get_gyro().x * AC_ATTITUDE_CONTROL_DEGX100);
@@ -571,6 +573,7 @@ float AC_AttitudeControl::rate_bf_to_motor_roll(float rate_target_cds)
     // calculate error and call pid controller
     rate_error = rate_target_cds - current_rate;
     p = _pid_rate_roll.get_p(rate_error);
+    //b = _pid_rate_roll_aero->get_p(rate_error); trever test scenario
 
     // get i term
     i = _pid_rate_roll.get_integrator();
@@ -588,6 +591,22 @@ float AC_AttitudeControl::rate_bf_to_motor_roll(float rate_target_cds)
 
     // To-Do: allow logging of PIDs?
 }
+
+
+
+#if FRAME_CONFIG == TILTROTOR_Y6_FRAME
+float AC_AttitudeControl::trevor_func(float rate_target_cds)
+{
+
+	return rate_target_cds*10.0f;
+
+
+}
+#endif
+
+
+
+
 
 // rate_bf_to_motor_pitch - ask the rate controller to calculate the motor outputs to achieve the target rate in centi-degrees / second
 float AC_AttitudeControl::rate_bf_to_motor_pitch(float rate_target_cds)

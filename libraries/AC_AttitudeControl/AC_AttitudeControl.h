@@ -50,7 +50,7 @@ public:
                         AP_Motors& motors,
                         AC_P& pi_angle_roll, AC_P& pi_angle_pitch, AC_P& pi_angle_yaw,
                         AC_PID& pid_rate_roll, AC_PID& pid_rate_pitch, AC_PID& pid_rate_yaw,
-                        AC_PID& pid_rate_pit_aero, AC_PID& pid_rate_roll_aero
+                        AC_PID *pid_rate_pit_aero, AC_PID *pid_rate_roll_aero
                         ) :
 		_ahrs(ahrs),
         _aparm(aparm),
@@ -199,8 +199,13 @@ protected:
     //
 	// rate_bf_to_motor_roll - ask the rate controller to calculate the motor outputs to achieve the target body-frame rate (in centi-degrees/sec) for roll, pitch and yaw
     float rate_bf_to_motor_roll(float rate_target_cds);
+#if FRAME_CONFIG == TILTROTOR_Y6_FRAME
+    float trevor_func(float rate_target_cds);
+#endif
     float rate_bf_to_motor_pitch(float rate_target_cds);
     virtual float rate_bf_to_motor_yaw(float rate_target_cds);
+
+
 
     //
     // throttle methods
@@ -238,8 +243,8 @@ protected:
     AC_PID&             _pid_rate_roll;
     AC_PID&             _pid_rate_pitch;
     AC_PID&             _pid_rate_yaw;
-    AC_PID&             _pid_rate_pit_aero;
-    AC_PID&             _pid_rate_roll_aero;
+    AC_PID*             _pid_rate_pit_aero;
+    AC_PID*             _pid_rate_roll_aero;
 
     // parameters
     AP_Float            _angle_rate_rp_max;     // maximum rate request output from the earth-frame angle controller for roll and pitch axis
