@@ -313,12 +313,13 @@ public:
         k_param_acro_balance_roll,
         k_param_acro_balance_pitch,
         k_param_acro_yaw_p, // 244
-        k_param_pid_rate_pit_aero, // 245 Trevor added in 1.2 for tiltrotor_Y6
-        k_param_pid_rate_roll_aero,//246 Trevor added in 1.2 for tiltrotor_Y6
-        k_param_tiltrotor_servo_7,
-        k_param_tiltrotor_servo_8,
-        k_param_tiltrotor_servo_9,
-        k_param_tiltrotor_servo_10,// 250
+        k_param_pid_rate_pit_aero,    //245 Trevor added in 1.2 for tiltrotor_Y6
+        k_param_pid_rate_roll_aero,   //246 Trevor added in 1.2 for tiltrotor_Y6
+        k_param_tiltrotor_servo_7,    //248 Trevor added in 1.4 for tiltrotor_Y6
+        k_param_tiltrotor_servo_8,    //249 Trevor added in 1.4 for tiltrotor_Y6
+        k_param_tiltrotor_servo_9,    //250 Trevor added in 1.4 for tiltrotor_Y6
+        k_param_tiltrotor_servo_10,   //251 Trevor added in 1.4 for tiltrotor_Y6
+        k_param_pid_rate_yaw_mot,     //251 Trevor added in 1.5 for tiltrotor_Y6
         // 254,255: reserved
     };
 
@@ -468,9 +469,10 @@ public:
     AC_PID                  pid_rate_yaw;
 #endif
 
-#if FRAME_CONFIG ==     TILTROTOR_Y6_FRAME        // Pitch and Roll P for the aerodyamic surfaces of a TILTROTOR_Y6_FRAME
+#if FRAME_CONFIG ==     TILTROTOR_Y6_FRAME        // Pitch and Roll P for the aerodynamic surfaces of a TILTROTOR_Y6_FRAME
     AC_PID          		pid_rate_pit_aero;           // Trevor added in 1.2 for tiltrotor_Y6
     AC_PID          		pid_rate_roll_aero;          // Trevor added in 1.2 for tiltrotor_Y6
+    AC_PID					pid_rate_yaw_mot;			// Trevor added in 1.5B for tiltrotor_Y6
 #endif
 
     AC_PID                  pid_loiter_rate_lat;
@@ -547,6 +549,7 @@ public:
 #if FRAME_CONFIG == TILTROTOR_Y6_FRAME
         pid_rate_pit_aero     	(RATE_PIT_P_AERO,       RATE_PIT_I_AERO,        RATE_PIT_D_AERO,       RATE_PIT_IMAX_A),
         pid_rate_roll_aero     	(RATE_ROL_P_AERO,       RATE_ROL_I_AERO,        RATE_ROL_D_AERO,       RATE_ROL_IMAX_A),
+        pid_rate_yaw_mot     	(RATE_YAW_P_MOT,        RATE_YAW_I_MOT,         RATE_YAW_D_MOT,        RATE_YAW_IMAX_M),
 #endif
 
         pid_loiter_rate_lat     (LOITER_RATE_P,         LOITER_RATE_I,          LOITER_RATE_D,          LOITER_RATE_IMAX),

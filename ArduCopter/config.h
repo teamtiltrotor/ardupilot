@@ -184,6 +184,10 @@
   # define RATE_ROL_I_AERO              0.100f
   # define RATE_ROL_D_AERO				0.004f
   # define RATE_ROL_IMAX_A              1000
+  # define RATE_YAW_P_MOT				0.2f
+  # define RATE_YAW_I_MOT               0.020f
+  # define RATE_YAW_D_MOT				0.000f
+  # define RATE_YAW_IMAX_M              1000
   # define GEAR_UP_SPEED_DEFUALT  	    1000
   # define GEAR_DN_SPEED_DEFUALT        1000
   # define AUTOTUNE_ENABLED             DISABLED

@@ -413,9 +413,22 @@ void AC_AttitudeControl::rate_controller_run()
     // call rate controllers and send output to motors object
     // To-Do: should the outputs from get_rate_roll, pitch, yaw be int16_t which is the input to the motors library?
     // To-Do: skip this step if the throttle out is zero?
-    _motors.set_roll(rate_bf_to_motor_roll(_rate_bf_target.x));
-    _motors.set_pitch(rate_bf_to_motor_pitch(_rate_bf_target.y));
-    _motors.set_yaw(rate_bf_to_motor_yaw(_rate_bf_target.z));
+
+
+
+	float Xp_target = cosf(M_PI_2 - 0.33f)*_rate_bf_target.x + cosf(0.33f)*_rate_bf_target.z;
+	float Zp_target = cosf(PI - 0.33f)*_rate_bf_target.x + cosf(M_PI_2 - 0.33f)*_rate_bf_target.z;
+
+
+    _motors.set_roll(rate_bf_to_motor_roll(Xp_target));  //PID #1           done
+    _motors.set_pitch(rate_bf_to_motor_pitch(_rate_bf_target.y)); //PID #5     done
+    _motors.set_yaw(rate_bf_to_motor_yaw(Zp_target));//PID #3                   done
+
+    //new functions added by us
+    _motors.set_roll_aero(rate_bf_to_motor_roll_aero(_rate_bf_target.x)); //PID #2
+    _motors.set_pitch_aero(rate_bf_to_motor_pitch_aero(_rate_bf_target.y));//PID #6
+    _motors.set_yaw_mot(rate_bf_to_motor_yaw_mot(_rate_bf_target.z));  //PID #4
+
 }
 
 //
@@ -568,7 +581,10 @@ float AC_AttitudeControl::rate_bf_to_motor_roll(float rate_target_cds)
 
     // get current rate
     // To-Do: make getting gyro rates more efficient?
-    current_rate = (_ahrs.get_gyro().x * AC_ATTITUDE_CONTROL_DEGX100);
+
+
+    current_rate = cosf(M_PI_2 - 0.33f)*(_ahrs.get_gyro().x * AC_ATTITUDE_CONTROL_DEGX100) + cosf(0.33f)*(_ahrs.get_gyro().z * AC_ATTITUDE_CONTROL_DEGX100);
+
 
     // calculate error and call pid controller
     rate_error = rate_target_cds - current_rate;
@@ -594,15 +610,173 @@ float AC_AttitudeControl::rate_bf_to_motor_roll(float rate_target_cds)
 
 
 
-#if FRAME_CONFIG == TILTROTOR_Y6_FRAME
-float AC_AttitudeControl::trevor_func(float rate_target_cds)
+
+
+
+
+
+
+
+
+
+// rate_bf_to_motor_roll - ask the rate controller to calculate the motor outputs to achieve the target rate in centi-degrees / second
+float AC_AttitudeControl::rate_bf_to_motor_roll_aero(float rate_target_cds)
 {
+    float p,i,d;            // used to capture pid values for logging
+    float current_rate;     // this iteration's rate
+    float rate_error;       // simply target_rate - current_rate
 
-	return rate_target_cds*10.0f;
+        // get current rate
+    // To-Do: make getting gyro rates more efficient?
 
 
+    current_rate = (_ahrs.get_gyro().x * AC_ATTITUDE_CONTROL_DEGX100);
+
+
+    // calculate error and call pid controller
+    rate_error = rate_target_cds - current_rate;
+    p = _pid_rate_roll_aero->get_p(rate_error);//
+    //b = _pid_rate_roll_aero->get_p(rate_error); trever test scenario
+
+    // get i term
+    i = _pid_rate_roll_aero->get_integrator();         //get_integrator();
+
+    // update i term as long as we haven't breached the limits or the I term will certainly reduce
+    if (!_motors.limit.roll_pitch || ((i>0&&rate_error<0)||(i<0&&rate_error>0))) {
+        i = _pid_rate_roll_aero->get_i(rate_error, _dt);// get_i(rate_error, _dt);
+    }
+
+    // get d term
+    d = _pid_rate_roll_aero->get_d(rate_error, _dt);//get_d(rate_error, _dt);
+
+    // constrain output and return
+    return constrain_float((p+i+d), -AC_ATTITUDE_RATE_RP_CONTROLLER_OUT_MAX, AC_ATTITUDE_RATE_RP_CONTROLLER_OUT_MAX);
+
+    // To-Do: allow logging of PIDs?
 }
-#endif
+
+
+// rate_bf_to_motor_roll - ask the rate controller to calculate the motor outputs to achieve the target rate in centi-degrees / second
+float AC_AttitudeControl::rate_bf_to_motor_pitch_aero(float rate_target_cds)
+{
+    float p,i,d;            // used to capture pid values for logging
+    float current_rate;     // this iteration's rate
+    float rate_error;       // simply target_rate - current_rate
+
+        // get current rate
+    // To-Do: make getting gyro rates more efficient?
+
+
+    current_rate = (_ahrs.get_gyro().y * AC_ATTITUDE_CONTROL_DEGX100);
+
+
+    // calculate error and call pid controller
+    rate_error = rate_target_cds - current_rate;
+
+    p = _pid_rate_pit_aero->get_p(rate_error) ;//get_p(rate_error);
+    //b = _pid_rate_roll_aero->get_p(rate_error); trever test scenario
+
+    // get i term
+    i = _pid_rate_pit_aero->get_integrator() ;//get_integrator();
+
+    // update i term as long as we haven't breached the limits or the I term will certainly reduce
+    if (!_motors.limit.roll_pitch || ((i>0&&rate_error<0)||(i<0&&rate_error>0))) {
+        i = _pid_rate_pit_aero->get_i(rate_error, _dt);
+    }
+
+    // get d term
+    d = _pid_rate_pit_aero->get_d(rate_error, _dt);
+
+    // constrain output and return
+    return constrain_float((p+i+d), -AC_ATTITUDE_RATE_RP_CONTROLLER_OUT_MAX, AC_ATTITUDE_RATE_RP_CONTROLLER_OUT_MAX);
+
+    // To-Do: allow logging of PIDs?
+}
+
+
+
+// rate_bf_to_motor_roll - ask the rate controller to calculate the motor outputs to achieve the target rate in centi-degrees / second
+float AC_AttitudeControl::rate_bf_to_motor_yaw_mot(float rate_target_cds)
+{
+    float p,i,d;            // used to capture pid values for logging
+    float current_rate;     // this iteration's rate
+    float rate_error;       // simply target_rate - current_rate
+
+        // get current rate
+    // To-Do: make getting gyro rates more efficient?
+
+
+    current_rate = (_ahrs.get_gyro().z * AC_ATTITUDE_CONTROL_DEGX100);
+
+
+    // calculate error and call pid controller
+    rate_error = rate_target_cds - current_rate;
+    p = _pid_rate_yaw_mot->get_p(rate_error)   ;//get_p(rate_error);
+    //b = _pid_rate_roll_aero->get_p(rate_error); trever test scenario
+
+    // get i term
+    i = _pid_rate_yaw_mot->get_integrator()   ;//get_integrator();
+
+    // update i term as long as we haven't breached the limits or the I term will certainly reduce
+    if (!_motors.limit.roll_pitch || ((i>0&&rate_error<0)||(i<0&&rate_error>0))) {
+        i = _pid_rate_yaw_mot->get_i(rate_error, _dt)  ;//get_i(rate_error, _dt);
+    }
+
+    // get d term
+    d = _pid_rate_yaw_mot->get_d(rate_error, _dt)   ;//get_d(rate_error, _dt);
+
+    // constrain output and return
+    return constrain_float((p+i+d), -AC_ATTITUDE_RATE_RP_CONTROLLER_OUT_MAX, AC_ATTITUDE_RATE_RP_CONTROLLER_OUT_MAX);
+
+    // To-Do: allow logging of PIDs?
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -650,6 +824,9 @@ float AC_AttitudeControl::rate_bf_to_motor_yaw(float rate_target_cds)
     // get current rate
     // To-Do: make getting gyro rates more efficient?
     current_rate = (_ahrs.get_gyro().z * AC_ATTITUDE_CONTROL_DEGX100);
+
+    current_rate = cosf(PI - 0.33f)* (_ahrs.get_gyro().x * AC_ATTITUDE_CONTROL_DEGX100)+ cosf(M_PI_2 - 0.33f)*(_ahrs.get_gyro().z * AC_ATTITUDE_CONTROL_DEGX100);
+
 
     // calculate error and call pid controller
     rate_error  = rate_target_cds - current_rate;

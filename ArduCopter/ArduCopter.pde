@@ -414,6 +414,8 @@ static AP_BoardConfig BoardConfig;
 // receiver RSSI
 static uint8_t receiver_rssi;
 
+
+
 ////////////////////////////////////////////////////////////////////////////////
 // Failsafe
 ////////////////////////////////////////////////////////////////////////////////
@@ -663,11 +665,11 @@ AC_AttitudeControl_Heli attitude_control(ahrs, aparm, motors, g.p_stabilize_roll
 #elif FRAME_CONFIG == TILTROTOR_Y6_FRAME
 AC_AttitudeControl attitude_control(ahrs, aparm, motors, g.p_stabilize_roll, g.p_stabilize_pitch, g.p_stabilize_yaw,
                         g.pid_rate_roll, g.pid_rate_pitch, g.pid_rate_yaw,
-                         &g.pid_rate_pit_aero, &g.pid_rate_roll_aero);
+                         &g.pid_rate_pit_aero, &g.pid_rate_roll_aero, &g.pid_rate_yaw_mot);
 #else
 ////////////////////////////////////////////////////////////////////////////////
 AC_AttitudeControl attitude_control(ahrs, aparm, motors, g.p_stabilize_roll, g.p_stabilize_pitch, g.p_stabilize_yaw,
-                        g.pid_rate_roll, g.pid_rate_pitch, g.pid_rate_yaw, NULL, NULL);
+                        g.pid_rate_roll, g.pid_rate_pitch, g.pid_rate_yaw, NULL, NULL, NULL);
 #endif
 AC_PosControl pos_control(ahrs, inertial_nav, motors, attitude_control,
                         g.p_alt_hold, g.p_throttle_rate, g.pid_throttle_accel,

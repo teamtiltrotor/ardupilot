@@ -41,6 +41,12 @@ public:
     // set update rate to motors - a value in hertz
     void                set_update_rate( uint16_t speed_hz );
 
+
+///tiltrotor
+    virtual void set_roll_aero(int16_t roll_in) { _servo1.servo_out = roll_in; };
+    virtual void set_pitch_aero(int16_t roll_in) { _servo2.servo_out = roll_in; };
+    virtual void set_yaw_mot(int16_t roll_in) { _servo3.servo_out = roll_in; };
+
     // enable - starts allowing signals to be sent to motors
     virtual void        enable();
 

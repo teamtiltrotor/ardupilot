@@ -104,10 +104,20 @@ public:
     int16_t             throttle_max() const { return _max_throttle;}
 
     // set_roll, set_pitch, set_yaw, set_throttle
-    void                set_roll(int16_t roll_in) { _rc_roll.servo_out = roll_in; };                    // range -4500 ~ 4500
-    void                set_pitch(int16_t pitch_in) { _rc_pitch.servo_out = pitch_in; };                // range -4500 ~ 4500
-    void                set_yaw(int16_t yaw_in) { _rc_yaw.servo_out = yaw_in; };                        // range -4500 ~ 4500
-    void                set_throttle(int16_t throttle_in) { _rc_throttle.servo_out = throttle_in; };    // range 0 ~ 1000
+           void                set_roll(int16_t roll_in) { _rc_roll.servo_out = roll_in; };                    // range -4500 ~ 4500
+           void                set_pitch(int16_t pitch_in) { _rc_pitch.servo_out = pitch_in; };                // range -4500 ~ 4500
+           void                set_yaw(int16_t yaw_in) { _rc_yaw.servo_out = yaw_in; };                        // range -4500 ~ 4500
+           void                set_throttle(int16_t throttle_in) { _rc_throttle.servo_out = throttle_in; };    // range 0 ~ 1000
+
+    virtual void set_roll_aero(int16_t roll_in) { _rc_roll.servo_out = roll_in; };
+    virtual void set_pitch_aero(int16_t roll_in) { _rc_roll.servo_out = roll_in; };
+    virtual void set_yaw_mot(int16_t roll_in) { _rc_roll.servo_out = roll_in; };
+
+    //new tiltrotor
+           // void                set_roll_aero(int16_t roll_in) { funcA(roll_in); };                    // range -4500 ~ 4500
+            //void                set_pitch_aero(int16_t pitch_in) { funcB(pitch_in); };                // range -4500 ~ 4500
+            //void                set_yaw_mot(int16_t yaw_in) { funcC(yaw_in); };                        // range -4500 ~ 4500
+
 
     // get_throttle_out - returns throttle sent to motors in the range 0 ~ 1000
     int16_t             get_throttle_out() const { return _rc_throttle.servo_out; }
@@ -184,6 +194,7 @@ protected:
     RC_Channel&         _rc_pitch;              // pitch input in from users is held in servo_out
     RC_Channel&         _rc_throttle;           // throttle input in from users is held in servo_out
     RC_Channel&         _rc_yaw;                // yaw input in from users is held in servo_out
+
     uint16_t            _speed_hz;              // speed in hz to send updates to motors
     int16_t             _min_throttle;          // the minimum throttle to be sent to the motors when they're on (prevents motors stalling while flying)
     int16_t             _max_throttle;          // the maximum throttle to be sent to the motors (sometimes limited by slow start)

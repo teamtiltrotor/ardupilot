@@ -27,7 +27,7 @@ public:
         AC_AttitudeControl(ahrs, aparm, motors,
                            p_angle_roll, p_angle_pitch, p_angle_yaw,
                            pid_rate_roll, pid_rate_pitch, pid_rate_yaw,
-                           NULL, NULL),
+                           NULL, NULL, NULL),
         _passthrough_roll(0), _passthrough_pitch(0)
 		{
             AP_Param::setup_object_defaults(this, var_info);

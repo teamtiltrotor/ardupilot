@@ -218,6 +218,11 @@ void AP_MotorsTiltrotor_Y6::output_armed()
     _servo2.calc_pwm();
     _servo3.calc_pwm();
     _servo4.calc_pwm();
+    _rc_roll.calc_pwm();
+    _rc_yaw.calc_pwm();
+    _rc_pitch.calc_pwm();
+
+
 
     // send output to each motor
     //hal.rcout->write(pgm_read_byte(&_motor_to_channel_map[AP_MOTORS_MOT_1]), _servo1.radio_out);
