@@ -412,7 +412,9 @@ static void telemetry_send(void)
  */
 static bool should_log(uint32_t mask)
 {
+
 #if LOGGING_ENABLED == ENABLED
+
     if (!(mask & g.log_bitmask) || in_mavlink_delay) {
         return false;
     }
@@ -420,10 +422,12 @@ static bool should_log(uint32_t mask)
     if (ret && !DataFlash.logging_started() && !in_log_download) {
         // we have to set in_mavlink_delay to prevent logging while
         // writing headers
+
         start_logging();
     }
     return ret;
 #else
     return false;
 #endif
+
 }

@@ -1151,6 +1151,12 @@ static void one_hz_loop()
         Log_Write_Data(DATA_AP_STATE, ap.value);
     }
 
+
+    // log battery info to the dataflash
+    if (should_log(MASK_LOG_CURRENT)) {
+        Log_Write_Current();
+    }
+
     // perform pre-arm checks & display failures every 30 seconds
     static uint8_t pre_arm_display_counter = 15;
     pre_arm_display_counter++;
@@ -1190,6 +1196,33 @@ static void one_hz_loop()
 #endif
 }
 
+<<<<<<< HEAD
+=======
+// called at 100hz but data from sensor only arrives at 20 Hz
+#if OPTFLOW == ENABLED
+static void update_optical_flow(void)
+{
+    static uint32_t last_of_update = 0;
+    static uint8_t of_log_counter = 0;
+
+    // if new data has arrived, process it
+    if( optflow.last_update != last_of_update ) {
+        last_of_update = optflow.last_update;
+        optflow.update_position(ahrs.roll, ahrs.pitch, ahrs.sin_yaw(), ahrs.cos_yaw(), current_loc.alt);      // updates internal lon and lat with estimation based on optical flow
+
+        // write to log at 5hz
+        of_log_counter++;
+        if( of_log_counter >= 4 ) {
+            of_log_counter = 0;
+            if (should_log(MASK_LOG_OPTFLOW)) {
+                Log_Write_Optflow();
+            }
+        }
+    }
+}
+#endif  // OPTFLOW == ENABLED
+
+>>>>>>> Copter: support logging while disarmed
 // called at 50hz
 static void update_GPS(void)
 {
