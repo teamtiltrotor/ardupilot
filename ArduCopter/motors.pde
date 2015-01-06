@@ -33,7 +33,9 @@ static void arm_motors_check()
         if (arming_counter == ARM_DELAY && !motors.armed()) {
             // run pre-arm-checks and display failures
             pre_arm_checks(true);
+
             if(ap.pre_arm_check && arm_checks(true,false)) {
+
                 if (!init_arm_motors()) {
                     // reset arming counter if arming fail
                     arming_counter = 0;
@@ -147,11 +149,18 @@ static bool init_arm_motors()
         startup_ground(true);
         // final check that gyros calibrated successfully
         if (((g.arming_check == ARMING_CHECK_ALL) || (g.arming_check & ARMING_CHECK_INS)) && !ins.gyro_calibrated_ok_all()) {
+<<<<<<< HEAD
             gcs_send_text_P(SEVERITY_HIGH,PSTR("Arm: Gyro calibration failed"));
             AP_Notify::flags.armed = false;
             failsafe_enable();
             return false;
         }
+=======
+            gcs_send_text_P(SEVERITY_HIGH,PSTR("Arm: Gyro cal failed"));
+            AP_Notify::flags.armed = false;
+            return false;
+    }
+>>>>>>> Copter: fail to arm if gyro cal fails
         did_ground_start = true;
     }
 
