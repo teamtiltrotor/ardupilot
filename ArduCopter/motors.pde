@@ -158,9 +158,14 @@ static bool init_arm_motors()
 =======
             gcs_send_text_P(SEVERITY_HIGH,PSTR("Arm: Gyro cal failed"));
             AP_Notify::flags.armed = false;
+            failsafe_enable();
             return false;
+<<<<<<< HEAD
     }
 >>>>>>> Copter: fail to arm if gyro cal fails
+=======
+        }
+>>>>>>> Copter: re-enable CPU failsafe if arming fails
         did_ground_start = true;
     }
 
