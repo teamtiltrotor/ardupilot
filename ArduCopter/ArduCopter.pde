@@ -1,6 +1,10 @@
 /// -*- tab-width: 4; Mode: C++; c-basic-offset: 4; indent-tabs-mode: nil -*-
 
+<<<<<<< HEAD
 #define THISFIRMWARE "ArduCopter V3.3-dev"
+=======
+#define THISFIRMWARE "ArduCopter V3.2-rc13"
+>>>>>>> Copter: version to AC3.2-rc13
 /*
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -1196,33 +1200,7 @@ static void one_hz_loop()
 #endif
 }
 
-<<<<<<< HEAD
-=======
-// called at 100hz but data from sensor only arrives at 20 Hz
-#if OPTFLOW == ENABLED
-static void update_optical_flow(void)
-{
-    static uint32_t last_of_update = 0;
-    static uint8_t of_log_counter = 0;
 
-    // if new data has arrived, process it
-    if( optflow.last_update != last_of_update ) {
-        last_of_update = optflow.last_update;
-        optflow.update_position(ahrs.roll, ahrs.pitch, ahrs.sin_yaw(), ahrs.cos_yaw(), current_loc.alt);      // updates internal lon and lat with estimation based on optical flow
-
-        // write to log at 5hz
-        of_log_counter++;
-        if( of_log_counter >= 4 ) {
-            of_log_counter = 0;
-            if (should_log(MASK_LOG_OPTFLOW)) {
-                Log_Write_Optflow();
-            }
-        }
-    }
-}
-#endif  // OPTFLOW == ENABLED
-
->>>>>>> Copter: support logging while disarmed
 // called at 50hz
 static void update_GPS(void)
 {
