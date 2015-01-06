@@ -70,6 +70,7 @@ static void guided_pos_control_start()
     set_auto_yaw_mode(get_default_auto_yaw_mode(false));
 }
 
+#if NAV_GUIDED == ENABLED
 // initialise guided mode's velocity controller
 static void guided_vel_control_start()
 {
@@ -83,6 +84,7 @@ static void guided_vel_control_start()
     // initialise velocity controller
     pos_control.init_vel_controller_xyz();
 }
+#endif
 
 // initialise guided mode's spline controller
 static void guided_spline_control_start()
@@ -116,6 +118,7 @@ static void guided_set_destination(const Vector3f& destination)
     wp_nav.set_wp_destination(destination);
 }
 
+#if NAV_GUIDED == ENABLED
 // guided_set_velocity - sets guided mode's target velocity
 static void guided_set_velocity(const Vector3f& velocity)
 {
@@ -127,6 +130,7 @@ static void guided_set_velocity(const Vector3f& velocity)
     // set position controller velocity target
     pos_control.set_desired_velocity(velocity);
 }
+#endif
 
 // set guided mode spline target
 static void guided_set_destination_spline(const Vector3f& destination, const Vector3f& velocity) {
@@ -165,6 +169,7 @@ static void guided_run()
         guided_pos_control_run();
         break;
 
+#if NAV_GUIDED == ENABLED
     case Guided_Velocity:
         // run velocity controller
         guided_vel_control_run();
@@ -174,6 +179,7 @@ static void guided_run()
         // run spline controller
         guided_spline_control_run();
         break;
+
     }
  }
 
